@@ -78,7 +78,7 @@ class NewsController extends Controller
         return response()->json(['message' => 'News deleted successfully'], 200);
     }
     
-    //
+    //get all news
     public function get_all_news(){
         $news= News::all();
         return response()->json($news);
