@@ -89,4 +89,16 @@ class NewsController extends Controller
         $news=News::findorFail($id);
         return response()->json($news);
     }
+
+    //get news for a specific age group
+    public function get_by_age(Request $request){
+        $age = $request->query('age');
+        $news = News::when($age, function ($query) use ($age) {
+            return $query->where(function ($q) use ($age) {
+                $q->whereNull('age_restriction')->orWhere('age_restriction', '<=', $age);
+            });
+        })->get();
+
+        return response()->json($news);
+    }
 }
