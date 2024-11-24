@@ -26,11 +26,12 @@ Route::controller(AuthController::class)->group(function () {
 });
 
 Route::middleware('auth:api')->group(function () {
-    Route::middleware('is_admin')->group(function () {
-        Route::resource('news', NewsController::class)->only(['store', 'update', 'destroy']);
-    });
+    // News routes (only admins can create, update, or delete news)
+    Route::resource('news', NewsController::class)->only(['create_news','update_news','delete_news']);
 
-    Route::resource('news.{newsId}.articles', ArticleController::class)->only(['index', 'store', 'update', 'destroy']);
+    // Articles routes (authenticated users can post articles)
+    Route::resource('news/{news}/articles', ArticleController::class)->only(['post_article']);
 });
+
 
 
