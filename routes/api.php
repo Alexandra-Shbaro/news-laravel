@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NewsController;
+use App\Http\Controllers\ArticleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,6 +23,14 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('logout', 'logout');
     Route::post('refresh', 'refresh');
     Route::get('me', 'me');
+});
+
+Route::middleware('auth:api')->group(function () {
+    Route::middleware('is_admin')->group(function () {
+        Route::resource('news', NewsController::class)->only(['store', 'update', 'destroy']);
+    });
+
+    Route::resource('news.{newsId}.articles', ArticleController::class)->only(['index', 'store', 'update', 'destroy']);
 });
 
 
